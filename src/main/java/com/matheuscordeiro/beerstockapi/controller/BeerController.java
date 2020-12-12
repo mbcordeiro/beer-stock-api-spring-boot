@@ -1,8 +1,10 @@
 package com.matheuscordeiro.beerstockapi.controller;
 
 import com.matheuscordeiro.beerstockapi.dto.BeerDTO;
+import com.matheuscordeiro.beerstockapi.dto.QuantityDTO;
 import com.matheuscordeiro.beerstockapi.exception.BeerAlreadyRegisteredException;
 import com.matheuscordeiro.beerstockapi.exception.BeerNotFoundException;
+import com.matheuscordeiro.beerstockapi.exception.BeerStockExceededException;
 import com.matheuscordeiro.beerstockapi.service.BeerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -39,5 +41,10 @@ public class BeerController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public  void deleteById(@PathVariable Long id) throws BeerNotFoundException {
         beerService.deleteById(id);
+    }
+
+    @PatchMapping("/{id}/increment")
+    public BeerDTO increment(@PathVariable Long id, @RequestBody @Valid QuantityDTO quantityDTO) throws BeerNotFoundException, BeerStockExceededException {
+        return beerService.increment(id, quantityDTO.getQuantity());
     }
 }
